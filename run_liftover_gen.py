@@ -45,10 +45,10 @@ if __name__ == "__main__":
         print("Liftover did not work. Did you make sure to install ucsc's liftOver?")
         sys.exit(1)
     compile_new_bim("lifted.bed", inputfile, outfile)
+    print("Number of non-XY, non-alt chromosome SNPs unlifted:")
+    cmd = "awk 'NF && $1!~/^#/' unlifted.bed | wc -l"
+    os.system(cmd)
     if not debug:
         cmd = "rm " + bedfile + " lifted.bed unlifted.bed"
         os.system(cmd)
-    print("Liftover complete. Note: due to ucsc not being in chr 1-26 format, sex chromosomes were not lifted. SNPs that could not be lifted were assigned a position of -1, which plink will ignore.")
-    print("Number of non-XY, non-alt chromosome SNPs unlifted:")
-    cmd = "awk '$4==-1 && $1 > 0 && $1 < 23 && $1 ~ /^[0-9]+$/' newhg19.bim | wc -l"
-    os.system(cmd)
+    print("Liftover complete. Note: any sex chromosomes and alternate chromosomes were not lifted. SNPs that could not be lifted were assigned a position of -1, which plink will ignore.")
